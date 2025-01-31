@@ -43,13 +43,47 @@ This repository provides various functions for statistical analysis and visualiz
 To create a basic ggplot2 visualization:
 
 ```r
-df <- data.frame(Group = rep(c("A", "B"), each = 10), Value = rnorm(20))
 
-p <- ggplot(df, aes(x = Group, y = Value, fill = Group)) +
-  geom_boxplot() +
-  theme_prism()
+set.seed(12345)   
+source("Extended_Statistical_Toolkit_functions.R")
 
-print(p)
+
+##########################################
+##### Continuous data with outliers ######
+
+# Generate a normal distribution
+data <- rnorm(100, mean = 50, sd = 10)  
+
+# Compute IQR
+Q1 <- quantile(data, 0.25)
+Q3 <- quantile(data, 0.75)
+IQR_val <- Q3 - Q1
+
+# Define outlier thresholds
+lower_bound <- Q1 - 3 * IQR_val
+upper_bound <- Q3 + 3 * IQR_val
+
+# Introduce outliers beyond 3×IQR
+outliers <- c(runif(3, min = lower_bound - 10, max = lower_bound - 5), 
+              runif(3, min = upper_bound + 5, max = upper_bound + 10))
+
+# Combine the original data with outliers
+data_with_outliers <- c(data, outliers)
+
+rare_values <- outliers_rare_values_detection(x = data_with_outliers, detenction_method = "non_parametric", N_IQR = 3, min_percent_cat = 1 )	
+print(rare_values)
+boxplot(data_with_outliers)
+
+########################################
+##### Discrete data with outliers ######
+
+data_cat <- rep(c("a","b"),100)
+data_cat <- c(data_cat,"c")
+rare_values_cat <- outliers_rare_values_detection(x = data_cat, detenction_method = "non_parametric", N_IQR = 3, min_percent_cat = 1 )	
+print(rare_values_cat)
+table(data_cat)
+
+
 ```
 
 ## Contributing
