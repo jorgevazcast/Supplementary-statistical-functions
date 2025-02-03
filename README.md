@@ -40,8 +40,7 @@ This repository provides various functions for statistical analysis and visualiz
 
 ## Examples
 
-To create a basic ggplot2 visualization:
-
+Outlier detection
 ```r
 
 set.seed(12345)   
